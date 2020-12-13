@@ -1,0 +1,9 @@
+.allure
+.gradle
+.idea
+build
+!gradle-wrapper.jar
+*.iml
+out
+.DS_Store
+

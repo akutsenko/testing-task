@@ -1,0 +1,63 @@
+version: "3"
+services:
+  selenium-hub:
+    image: selenium/hub:latest
+    container_name: selenium_hub
+    logging:
+      driver: none
+    ports:
+      - "4444:4444"
+    networks:
+      - selenium
+    expose:
+      - 4444
+  nodechrome:
+    restart: always
+    image: selenium/node-chrome-debug:latest
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "5900"
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=selenium-hub
+      - HUB_PORT_4444_TCP_PORT=4444
+    logging:
+      driver: none
+    networks:
+      - selenium
+  nodefirefox:
+    restart: always
+    image: selenium/node-firefox-debug:latest
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "5900"
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=selenium-hub
+      - HUB_PORT_4444_TCP_PORT=4444
+    logging:
+      driver: none
+    networks:
+      - selenium
+  test_runner:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: tests_run
+    container_name: tests_project
+    user: root
+    ports:
+      - "1111:1111"
+    networks:
+      - selenium
+    depends_on:
+      - selenium-hub
+      - nodechrome
+      - nodefirefox
+
+networks:
+  selenium:

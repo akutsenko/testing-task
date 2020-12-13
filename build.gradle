@@ -1,0 +1,64 @@
+plugins {
+    id "java"
+    id "io.qameta.allure" version "2.8.1"
+    id 'com.adarshr.test-logger' version '2.1.0'
+    id 'io.franzbecker.gradle-lombok' version '3.1.0'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile(
+            "io.qameta.allure:allure-rest-assured:2.13.2",
+            "org.aeonbits.owner:owner:1.0.12",
+            "ch.qos.logback:logback-classic:1.2.3",
+            "ch.qos.logback:logback-core:1.2.3",
+            "io.rest-assured:rest-assured:4.3.1",
+            "com.fasterxml.jackson.core:jackson-databind:2.11.2",
+            "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.11.0",
+            "org.junit.jupiter:junit-jupiter-engine:5.7.0",
+            "org.junit.jupiter:junit-jupiter-api:5.7.0",
+            "org.junit.jupiter:junit-jupiter-params:5.7.0",
+            "org.codehaus.groovy:groovy-all:3.0.7",
+            "org.seleniumhq.selenium:selenium-java:3.141.59",
+            "io.github.bonigarcia:webdrivermanager:4.1.0",
+            "ru.stqa.selenium:webdriver-factory:4.4"
+    )
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+
+    systemProperties System.getProperties()
+    systemProperty 'allure.model.indentOutput', true
+    systemProperty 'allure.results.directory', 'build/allure-results'
+    systemProperty 'allure.link.issue.pattern', 'https://github.com/allure-framework/allure-docs/issues/{}'
+    systemProperty 'allure.link.tms.pattern', 'https://github.com/allure-framework/allure-docs/issues/{}'
+
+    testlogger {
+        theme 'standard-parallel'
+        showFullStackTraces true
+        showStandardStreams true
+    }
+    test.outputs.upToDateWhen { false }
+    //maxParallelForks = 2
+}
+
+allure {
+    useJUnit5 {
+        version = '2.9.0'
+    }
+    version = '2.9.0'
+    autoconfigure = true
+    aspectjweaver = true
+    configuration = 'compile'
+}
+
+wrapper.gradleVersion = "6.7.1"
