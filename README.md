@@ -23,5 +23,5 @@
 
 ### Dockerized test execution:
 * `docker-compose up` - will create container with test project and installed allure report. UI tests will be executed in separate container(s)
-* wait for the tests to be executed and allure report to be launched: `Server started at <http://<ip address>>:1111/>. Press <Ctrl+C> to exit`
+* wait for the tests to be executed and allure report to be launched. The following message will appear in console: `Server started at <http://<ip address>>:1111/>. Press <Ctrl+C> to exit`
 * open your local browser and navigate to url `http://localhost:1111` to see the allure report details
